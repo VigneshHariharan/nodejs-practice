@@ -1,4 +1,4 @@
-import { dbQuery } from "../connection";
+// import { dbQuery } from "../oldConnection";
 const queries = `
 CREATE TABLE IF not EXISTS user(
     id INT NOT NULL AUTO_INCREMENT,
@@ -68,4 +68,4 @@ CREATE TABLE IF not EXISTS resource_central(
 select (1 + 1);
 `;
 
-export const createTables = async () => await dbQuery(queries);
+// export const createTables = async () => await dbQuery(queries);

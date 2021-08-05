@@ -9,13 +9,12 @@ datasource db {
 
 model flashcards {
   id         Int       @id @default(autoincrement())
-  title      String    @db.VarChar(40)
   question   String?   @db.Text
   answer     String?   @db.Text
-  parent_id  Int?
   created_by Int?
   created_at DateTime? @default(now()) @db.Timestamp(0)
   updated_at DateTime? @default(now()) @db.Timestamp(0)
+  code       String?   @db.Text
   user       user?     @relation(fields: [created_by], references: [id])
 
   @@index([created_by], name: "created_by")
@@ -32,22 +31,50 @@ model user {
   created_at                    DateTime?    @default(now()) @db.Timestamp(0)
   updated_at                    DateTime?    @default(now()) @db.Timestamp(0)
   flashcards                    flashcards[]
+  notes                         notes?
   tags_tags_accessible_byTouser tags[]       @relation("tags_accessible_byTouser")
   tags_tags_created_byTouser    tags[]       @relation("tags_created_byTouser")
 }
 
 model tags {
-  id                            Int       @id @default(autoincrement())
-  name                          String    @db.VarChar(40)
-  description                   String?   @db.Text
+  id                            Int             @id @default(autoincrement())
+  name                          String          @db.VarChar(40)
+  description                   String?         @db.Text
   tags_order                    Json?
   created_by                    Int?
   accessible_by                 Int?
-  created_at                    DateTime? @default(now()) @db.Timestamp(0)
-  updated_at                    DateTime? @default(now()) @db.Timestamp(0)
-  user_tags_accessible_byTouser user?     @relation("tags_accessible_byTouser", fields: [accessible_by], references: [id])
-  user_tags_created_byTouser    user?     @relation("tags_created_byTouser", fields: [created_by], references: [id])
+  created_at                    DateTime?       @default(now()) @db.Timestamp(0)
+  updated_at                    DateTime?       @default(now()) @db.Timestamp(0)
+  user_tags_accessible_byTouser user?           @relation("tags_accessible_byTouser", fields: [accessible_by], references: [id])
+  user_tags_created_byTouser    user?           @relation("tags_created_byTouser", fields: [created_by], references: [id])
+  filter_mapper                 filter_mapper[]
 
   @@index([accessible_by], name: "accessible_by")
   @@index([created_by], name: "created_by")
+}
+
+model filter_mapper {
+  id         Int       @id @default(autoincrement())
+  notes_id   Int
+  tag_id     Int
+  created_at DateTime? @default(now()) @db.Timestamp(0)
+  updated_at DateTime? @default(now()) @db.Timestamp(0)
+  notes      notes     @relation(fields: [notes_id], references: [id])
+  tags       tags      @relation(fields: [tag_id], references: [id])
+
+  @@index([notes_id], name: "notes_id")
+  @@index([tag_id], name: "tag_id")
+}
+
+model notes {
+  id              Int             @id @default(autoincrement())
+  study_resources String?         @db.Text
+  content         String?         @db.Text
+  created_by      Int             @unique
+  revised_at      DateTime?       @db.Timestamp(0)
+  is_private      Boolean?        @default(false)
+  created_at      DateTime?       @default(now()) @db.Timestamp(0)
+  updated_at      DateTime?       @default(now()) @db.Timestamp(0)
+  user            user            @relation(fields: [created_by], references: [id])
+  filter_mapper   filter_mapper[]
 }

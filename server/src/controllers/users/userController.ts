@@ -9,7 +9,7 @@ router.get("/users", async (req, res) => {
   res.status(200).json({
     success: true,
     data: {
-      users: users?.results,
+      users: users,
     },
 
     message: "",
@@ -67,7 +67,7 @@ router.post("/users", async (req, res) => {
   res.status(200).json({
     success: true,
     data: {
-      user,
+      user: userPostQuery,
     },
     message: "",
   });

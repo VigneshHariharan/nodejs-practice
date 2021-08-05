@@ -2,8 +2,6 @@ import express, { Express, Request, Response } from "express";
 import bodyParser from "body-parser";
 import helmet from "helmet";
 import dotenv from "dotenv";
-import { database } from "./models/connection";
-import { createTables } from "./models/schema/schema";
 
 import {
   // notesRoutes,
@@ -11,6 +9,7 @@ import {
   // resourceRoutes,
   utilRoutes,
   authRoutes,
+  flashcardsRoutes,
 } from "./controllers/routes";
 
 const PORT = process.env.PORT || 3000;
@@ -21,12 +20,9 @@ app.use(helmet());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// app.use("/", notesRoutes);
-// app.use("/", userRoutes);
-// app.use("/", resourceRoutes);
-// app.use("/", resourceRoutes);
-// app.use("/", authRoutes);
-// app.use("/utils", utilRoutes);
+app.use("/", userRoutes);
+app.use("/", authRoutes);
+app.use("/flashcards", flashcardsRoutes);
 
 app.get("/", (req: Request, res: Response) => {
   res.send("<h1>Hello from the TypeScript world!</h1>");

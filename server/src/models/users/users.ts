@@ -1,21 +1,37 @@
-import { dbQuery } from "../connection";
+// import { dbQuery } from "../oldConnection";
 import { IUser, IUserIndexModel } from "./IUser";
+import { PrismaClient, Prisma } from "@prisma/client";
 
-export const getUsersIndex = async (): Promise<IUserIndexModel> => {
-  const users: IUserIndexModel = await dbQuery("select * from user");
-  return users;
+const prisma = new PrismaClient();
+
+export const getUsersIndex = async () => {
+  // const users: IUserIndexModel = await dbQuery("select * from user");
+  // return users;
+
+  return await prisma.user.findMany();
+};
+
+export const getUserByEmail = async (email: string) => {
+  return await prisma.user.findFirst({
+    where: {
+      email,
+    },
+  });
 };
 
 export const getUserShow = async (id: number) => {};
 
 export const addUser = async (user: IUser) => {
-  const columnsName: string[] = Object.keys(user);
-  const fieldValues: string[] = Object.values(user);
+  await prisma.user
+    .create({
+      data: user,
+    })
+    .then((value) => {
+      console.log("result value sent", value, user);
+    })
+    .catch((error) => {
+      console.log("error on create user : ", error, user);
+    });
 
-  const users = await dbQuery(`insert into user (??) values(?);`, [
-    columnsName,
-    fieldValues,
-  ]);
-
-  return users;
+  return user;
 };

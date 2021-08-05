@@ -36,70 +36,84 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getResourceshow = exports.deleteResource = exports.updateResource = exports.addResource = exports.getResourcesIndex = void 0;
-var connection_1 = require("../connection");
-var getResourcesIndex = function () { return __awaiter(void 0, void 0, void 0, function () {
-    var resources;
+exports.deleteFlashcard = exports.updateFlashcard = exports.createFlashcards = exports.getFlashcards = void 0;
+var client_1 = require("@prisma/client");
+var prisma = new client_1.PrismaClient();
+var getFlashcards = function () { return __awaiter(void 0, void 0, void 0, function () {
+    var flashcards;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, connection_1.dbQuery("select id,title, parent_id, description, photo, created_by from resources")];
+            case 0: return [4 /*yield*/, prisma.flashcards.findMany({
+                    where: {
+                        created_by: 1,
+                    },
+                })];
             case 1:
-                resources = _a.sent();
-                return [2 /*return*/, resources];
+                flashcards = _a.sent();
+                return [2 /*return*/, flashcards];
         }
     });
 }); };
-exports.getResourcesIndex = getResourcesIndex;
-var addResource = function (resources) { return __awaiter(void 0, void 0, void 0, function () {
-    var columnsName, fieldValues, resourcesQuery;
+exports.getFlashcards = getFlashcards;
+var createFlashcards = function (card) { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0:
-                columnsName = Object.keys(resources);
-                fieldValues = Object.values(resources);
-                return [4 /*yield*/, connection_1.dbQuery("insert into resources (??) values(?);", [columnsName, fieldValues])];
+            case 0: return [4 /*yield*/, prisma.flashcards
+                    .create({
+                    data: card,
+                })
+                    .then(function (value) {
+                    return value;
+                })
+                    .catch(function (error) {
+                    console.log("createFlashcards failed ", error);
+                })];
             case 1:
-                resourcesQuery = _a.sent();
-                return [2 /*return*/, resourcesQuery];
+                _a.sent();
+                return [2 /*return*/];
         }
     });
 }); };
-exports.addResource = addResource;
-var updateResource = function (resources, id) { return __awaiter(void 0, void 0, void 0, function () {
-    var columnsName, fieldValues, updateQuery, col, resourcesQuery;
+exports.createFlashcards = createFlashcards;
+var updateFlashcard = function (card) { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0:
-                columnsName = Object.keys(resources);
-                fieldValues = Object.values(resources);
-                updateQuery = "";
-                for (col = 0; col < columnsName.length; col++) {
-                    updateQuery = " " + columnsName[col] + "=" + fieldValues[col] + " ";
-                }
-                return [4 /*yield*/, connection_1.dbQuery("update resources set " + updateQuery + " where id=(?) ;", [id])];
+            case 0: return [4 /*yield*/, prisma.flashcards
+                    .update({
+                    data: {
+                        code: card === null || card === void 0 ? void 0 : card.code,
+                        answer: card === null || card === void 0 ? void 0 : card.answer,
+                        question: card === null || card === void 0 ? void 0 : card.question,
+                    },
+                    where: {
+                        id: card.id || 1,
+                    },
+                })
+                    .then(function (value) {
+                    return value;
+                })
+                    .catch(function (error) {
+                    console.log("createFlashcards failed ", error);
+                })];
             case 1:
-                resourcesQuery = _a.sent();
-                return [2 /*return*/, resourcesQuery];
+                _a.sent();
+                return [2 /*return*/];
         }
     });
 }); };
-exports.updateResource = updateResource;
-var deleteResource = function (id) { return __awaiter(void 0, void 0, void 0, function () {
-    var resources, updateResourceRelations;
+exports.updateFlashcard = updateFlashcard;
+var deleteFlashcard = function (id) { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, connection_1.dbQuery("update resources set parent_id=0 where parent_id=(?)", [id])];
+            case 0: return [4 /*yield*/, prisma.flashcards.delete({
+                    where: {
+                        id: id,
+                    },
+                })];
             case 1:
-                updateResourceRelations = _a.sent();
-                return [4 /*yield*/, connection_1.dbQuery("delete into resources where id = (?)", [id])];
-            case 2:
-                resources = _a.sent();
-                return [2 /*return*/, resources];
+                _a.sent();
+                return [2 /*return*/];
         }
     });
 }); };
-exports.deleteResource = deleteResource;
-var getResourceshow = function (id) { return __awaiter(void 0, void 0, void 0, function () { return __generator(this, function (_a) {
-    return [2 /*return*/];
-}); }); };
-exports.getResourceshow = getResourceshow;
+exports.deleteFlashcard = deleteFlashcard;

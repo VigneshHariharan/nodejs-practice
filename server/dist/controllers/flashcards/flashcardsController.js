@@ -37,19 +37,19 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var express_1 = require("express");
-var resources_1 = require("../../models/resources/resources");
+var flashcardsModel_1 = require("../../models/flashcards/flashcardsModel");
 var router = express_1.Router();
-router.get("/resources", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var resources;
+router.get("", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var flashcards;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, resources_1.getResourcesIndex()];
+            case 0: return [4 /*yield*/, flashcardsModel_1.getFlashcards()];
             case 1:
-                resources = _a.sent();
+                flashcards = _a.sent();
                 res.status(200).json({
                     success: true,
                     data: {
-                        resources: resources === null || resources === void 0 ? void 0 : resources.results,
+                        flashcards: flashcards,
                     },
                     message: "",
                 });
@@ -57,58 +57,89 @@ router.get("/resources", function (req, res) { return __awaiter(void 0, void 0, 
         }
     });
 }); });
-router.get("/resources:id", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var id, user;
+router.post("", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var flashcards, answer, created_by, id, code, question, flashcardsQuery;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                id = req.params.id;
-                if (!id) {
+                flashcards = req.body;
+                if (!(flashcards === null || flashcards === void 0 ? void 0 : flashcards.question)) {
                     res.status(400).json({
-                        success: false,
-                        message: "Send an id",
+                        message: "send question",
                     });
                 }
-                return [4 /*yield*/, resources_1.getResourceshow(Number(id))];
-            case 1:
-                user = _a.sent();
-                res.status(200).json({
-                    success: true,
-                    data: {
-                        user: user,
-                    },
-                    message: "",
-                });
-                return [2 /*return*/];
-        }
-    });
-}); });
-router.post("/resources", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var resources, title, description, parent_id, created_by, photo, resourcesQuery;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                resources = req.body;
-                if (!(resources === null || resources === void 0 ? void 0 : resources.title)) {
+                if (!(flashcards === null || flashcards === void 0 ? void 0 : flashcards.answer)) {
                     res.status(400).json({
-                        message: "send title of resource",
+                        message: "send answer",
                     });
                 }
-                title = resources.title, description = resources.description, parent_id = resources.parent_id, created_by = resources.created_by, photo = resources.photo;
-                return [4 /*yield*/, resources_1.addResource({
-                        title: title,
-                        description: description,
-                        parent_id: parent_id,
+                if (!(flashcards === null || flashcards === void 0 ? void 0 : flashcards.created_by)) {
+                    res.status(400).json({
+                        message: "cannot create without user id",
+                    });
+                }
+                answer = flashcards.answer, created_by = flashcards.created_by, id = flashcards.id, code = flashcards.code, question = flashcards.question;
+                return [4 /*yield*/, flashcardsModel_1.createFlashcards({
+                        answer: answer,
                         created_by: created_by,
-                        photo: photo,
+                        id: id,
+                        code: code,
+                        question: question,
                     })];
             case 1:
-                resourcesQuery = _a.sent();
+                flashcardsQuery = _a.sent();
                 res.status(200).json({
                     success: true,
                     data: {
-                        resources: resources,
-                        resourcesQuery: resourcesQuery,
+                        user: flashcardsQuery,
+                    },
+                    message: "",
+                });
+                return [2 /*return*/];
+        }
+    });
+}); });
+router.put("", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var flashcards, answer, created_by, id, code, question, flashcardsQuery;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                flashcards = req.body;
+                answer = flashcards.answer, created_by = flashcards.created_by, id = flashcards.id, code = flashcards.code, question = flashcards.question;
+                return [4 /*yield*/, flashcardsModel_1.updateFlashcard({
+                        answer: answer,
+                        created_by: created_by,
+                        id: id,
+                        code: code,
+                        question: question,
+                    })];
+            case 1:
+                flashcardsQuery = _a.sent();
+                res.status(200).json({
+                    success: true,
+                    data: {
+                        user: flashcardsQuery,
+                    },
+                    message: "",
+                });
+                return [2 /*return*/];
+        }
+    });
+}); });
+router.delete("/:id", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var flashcards;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, flashcardsModel_1.deleteFlashcard(Number(req.params.id))];
+            case 1:
+                _a.sent();
+                return [4 /*yield*/, flashcardsModel_1.getFlashcards()];
+            case 2:
+                flashcards = _a.sent();
+                res.status(200).json({
+                    success: true,
+                    data: {
+                        flashcards: flashcards,
                     },
                     message: "",
                 });

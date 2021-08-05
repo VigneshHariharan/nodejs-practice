@@ -49,7 +49,7 @@ router.get("/users", function (req, res) { return __awaiter(void 0, void 0, void
                 res.status(200).json({
                     success: true,
                     data: {
-                        users: users === null || users === void 0 ? void 0 : users.results,
+                        users: users,
                     },
                     message: "",
                 });
@@ -118,7 +118,7 @@ router.post("/users", function (req, res) { return __awaiter(void 0, void 0, voi
                 res.status(200).json({
                     success: true,
                     data: {
-                        user: user,
+                        user: userPostQuery,
                     },
                     message: "",
                 });

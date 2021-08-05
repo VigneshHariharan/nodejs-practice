@@ -36,38 +36,54 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.addUser = exports.getUserShow = exports.getUsersIndex = void 0;
-var connection_1 = require("../connection");
+exports.addUser = exports.getUserShow = exports.getUserByEmail = exports.getUsersIndex = void 0;
+var client_1 = require("@prisma/client");
+var prisma = new client_1.PrismaClient();
 var getUsersIndex = function () { return __awaiter(void 0, void 0, void 0, function () {
-    var users;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, connection_1.dbQuery("select * from user")];
-            case 1:
-                users = _a.sent();
-                return [2 /*return*/, users];
+            case 0: return [4 /*yield*/, prisma.user.findMany()];
+            case 1: 
+            // const users: IUserIndexModel = await dbQuery("select * from user");
+            // return users;
+            return [2 /*return*/, _a.sent()];
         }
     });
 }); };
 exports.getUsersIndex = getUsersIndex;
+var getUserByEmail = function (email) { return __awaiter(void 0, void 0, void 0, function () {
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, prisma.user.findFirst({
+                    where: {
+                        email: email,
+                    },
+                })];
+            case 1: return [2 /*return*/, _a.sent()];
+        }
+    });
+}); };
+exports.getUserByEmail = getUserByEmail;
 var getUserShow = function (id) { return __awaiter(void 0, void 0, void 0, function () { return __generator(this, function (_a) {
     return [2 /*return*/];
 }); }); };
 exports.getUserShow = getUserShow;
 var addUser = function (user) { return __awaiter(void 0, void 0, void 0, function () {
-    var columnsName, fieldValues, users;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0:
-                columnsName = Object.keys(user);
-                fieldValues = Object.values(user);
-                return [4 /*yield*/, connection_1.dbQuery("insert into user (??) values(?);", [
-                        columnsName,
-                        fieldValues,
-                    ])];
+            case 0: return [4 /*yield*/, prisma.user
+                    .create({
+                    data: user,
+                })
+                    .then(function (value) {
+                    console.log("result value sent", value, user);
+                })
+                    .catch(function (error) {
+                    console.log("error on create user : ", error, user);
+                })];
             case 1:
-                users = _a.sent();
-                return [2 /*return*/, users];
+                _a.sent();
+                return [2 /*return*/, user];
         }
     });
 }); };
