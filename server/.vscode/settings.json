@@ -1,0 +1,31 @@
+{
+    "sqltools.connections": [
+        {
+            "mysqlOptions": {
+                "authProtocol": "default"
+            },
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 3306,
+            "driver": "MySQL",
+            "name": "Nemo",
+            "database": "nemo",
+            "username": "root",
+            "password": "Learnyst@123"
+        },
+        {
+            "mysqlOptions": {
+                "authProtocol": "default"
+            },
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 3306,
+            "driver": "MySQL",
+            "name": "nemo",
+            "database": "nemo",
+            "username": "vignesh",
+            "password": "learnyst"
+        }
+    ],
+    "git.ignoreLimitWarning": true
+}

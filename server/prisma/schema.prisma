@@ -1,0 +1,53 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model flashcards {
+  id         Int       @id @default(autoincrement())
+  title      String    @db.VarChar(40)
+  question   String?   @db.Text
+  answer     String?   @db.Text
+  parent_id  Int?
+  created_by Int?
+  created_at DateTime? @default(now()) @db.Timestamp(0)
+  updated_at DateTime? @default(now()) @db.Timestamp(0)
+  user       user?     @relation(fields: [created_by], references: [id])
+
+  @@index([created_by], name: "created_by")
+}
+
+model user {
+  id                            Int          @id @default(autoincrement())
+  name                          String       @unique @db.VarChar(40)
+  email                         String       @unique @db.VarChar(40)
+  mobile_number                 String?      @db.VarChar(40)
+  description                   String?      @db.VarChar(200)
+  password                      String       @db.VarChar(100)
+  profile_photo                 String?      @db.VarChar(100)
+  created_at                    DateTime?    @default(now()) @db.Timestamp(0)
+  updated_at                    DateTime?    @default(now()) @db.Timestamp(0)
+  flashcards                    flashcards[]
+  tags_tags_accessible_byTouser tags[]       @relation("tags_accessible_byTouser")
+  tags_tags_created_byTouser    tags[]       @relation("tags_created_byTouser")
+}
+
+model tags {
+  id                            Int       @id @default(autoincrement())
+  name                          String    @db.VarChar(40)
+  description                   String?   @db.Text
+  tags_order                    Json?
+  created_by                    Int?
+  accessible_by                 Int?
+  created_at                    DateTime? @default(now()) @db.Timestamp(0)
+  updated_at                    DateTime? @default(now()) @db.Timestamp(0)
+  user_tags_accessible_byTouser user?     @relation("tags_accessible_byTouser", fields: [accessible_by], references: [id])
+  user_tags_created_byTouser    user?     @relation("tags_created_byTouser", fields: [created_by], references: [id])
+
+  @@index([accessible_by], name: "accessible_by")
+  @@index([created_by], name: "created_by")
+}

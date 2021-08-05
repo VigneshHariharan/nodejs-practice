@@ -1,0 +1,122 @@
+-- use nemo;
+
+
+CREATE TABLE IF not EXISTS user(
+    id INT NOT NULL AUTO_INCREMENT,
+    name VARCHAR(40) NOT NULL,
+    email VARCHAR(40) NOT NULL,
+    mobile_number VARCHAR(40),
+    description VARCHAR(200),
+    password VARCHAR(100) NOT NULL,
+    profile_photo VARCHAR(100) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP on UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY(id)
+);
+
+CREATE TABLE IF not EXISTS resource(
+    id INT NOT NULL AUTO_INCREMENT,
+    title VARCHAR(40) NOT NULL,
+    email VARCHAR(40) NOT NULL,
+    mobile_number VARCHAR(40),
+    parent_id int,
+    description text,
+    photo VARCHAR(100),
+    created_by int,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP on UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY(id)
+);
+
+
+CREATE TABLE IF not EXISTS notes(
+    id INT NOT NULL AUTO_INCREMENT,
+    title VARCHAR(40) NOT NULL,
+    email VARCHAR(40) NOT NULL,
+    mobile_number VARCHAR(40),
+    parent_id int,
+    content text,
+    created_by int,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP on UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY(id),
+    FOREIGN KEY (created_by) REFERENCES user(id)
+);
+
+CREATE TABLE IF not EXISTS flashcards(
+    id INT NOT NULL AUTO_INCREMENT,
+    title VARCHAR(40) NOT NULL,
+    question text, 
+    answer text,
+    parent_id int,
+    content text,
+    created_by int,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP on UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY(id),
+    FOREIGN KEY (created_by) REFERENCES user(id)
+);
+
+
+CREATE TABLE IF not EXISTS resource_central(
+    id INT NOT NULL AUTO_INCREMENT,
+    resource_id int NOT NULL,
+    notes_id  int NOT NULL,
+    flashcard_id  int NOT NULL,
+    PRIMARY KEY(id),
+    FOREIGN KEY (resource_id) REFERENCES resource(id),
+    FOREIGN KEY (notes_id) REFERENCES notes(id),
+    FOREIGN KEY (flashcard_id) REFERENCES flashcards(id)
+
+);
+
+
+-- - id
+-- - resource_id
+-- - notes_id
+-- - flashcard_id
+-- - created_at not null
+
+
+-- resource:
+
+-- - id not null
+-- - title not null
+-- - content
+-- - parent_id -> leads to resource
+-- - created_by - one user
+-- - updated_by - can be multiple users
+-- - created_at not null
+-- - updated at not null
+
+-- notes:
+
+-- - id not null
+-- - title not null
+-- - content
+-- - resource_id -> multiple resource ids
+-- - created_by - one user
+-- - updated_by - can be multiple users
+-- - created_at not null
+-- - updated at not null
+
+-- flashcards
+
+-- - id not null
+-- - question
+-- - answer
+-- - resource_ids -> multiple resources
+-- - notes_ids -> multiple ids
+-- - created_by - one user
+-- - created_at not null
+-- - updated at not null
+
+-- <!-- only for relation -->
+
+-- resource_relation:
+
+-- - id
+-- - resource_id
+-- - notes_id
+-- - flashcard_id
+-- - created_at not null
