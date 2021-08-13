@@ -2,7 +2,7 @@ import express, { Express, Request, Response } from "express";
 import bodyParser from "body-parser";
 import helmet from "helmet";
 import dotenv from "dotenv";
-
+import { protectUser } from "./middlewares";
 import {
   // notesRoutes,
   userRoutes,
@@ -10,6 +10,7 @@ import {
   utilRoutes,
   authRoutes,
   flashcardsRoutes,
+  feedsRoutes,
 } from "./controllers/routes";
 
 const PORT = process.env.PORT || 3000;
@@ -22,6 +23,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use("/", userRoutes);
 app.use("/", authRoutes);
+app.use("/feeds", feedsRoutes);
+
 app.use("/flashcards", flashcardsRoutes);
 
 app.get("/", (req: Request, res: Response) => {

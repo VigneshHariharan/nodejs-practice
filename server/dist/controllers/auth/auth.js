@@ -42,16 +42,22 @@ var bcrypt_1 = require("bcrypt");
 var users_1 = require("../../models/users/users");
 var router = express_1.Router();
 router.post("/signup", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var name, email, password, isUserPresent, user, accessToken;
-    var _a;
-    return __generator(this, function (_b) {
-        switch (_b.label) {
+    var email, password, isUserPresent, user, accessToken;
+    var _a, _b;
+    return __generator(this, function (_c) {
+        switch (_c.label) {
             case 0:
-                name = req.body.name;
                 email = req.body.email;
                 password = req.body.password;
-                console.log("process env", process.env);
-                isUserPresent = users_1.getUserByEmail(email);
+                if (!email || !password) {
+                    res.status(400).json({
+                        success: false,
+                        message: "send email and password",
+                    });
+                }
+                return [4 /*yield*/, ((_a = users_1.getUserByEmail(email)) === null || _a === void 0 ? void 0 : _a.then(function (value) { return value === null || value === void 0 ? void 0 : value.email; }))];
+            case 1:
+                isUserPresent = _c.sent();
                 if (isUserPresent) {
                     res.status(401).json({
                         success: false,
@@ -59,11 +65,10 @@ router.post("/signup", function (req, res) { return __awaiter(void 0, void 0, vo
                     });
                 }
                 user = {
-                    name: name,
                     email: email,
                     password: bcrypt_1.hashSync(password, 10),
                 };
-                accessToken = jsonwebtoken_1.sign({ name: name, email: email }, (_a = process.env.JWT_ACCESS_KEY) !== null && _a !== void 0 ? _a : "");
+                accessToken = jsonwebtoken_1.sign({ email: email }, (_b = process.env.JWT_ACCESS_KEY) !== null && _b !== void 0 ? _b : "");
                 return [4 /*yield*/, users_1.addUser(user)
                         .then(function () {
                         res.status(200).json({
@@ -79,39 +84,48 @@ router.post("/signup", function (req, res) { return __awaiter(void 0, void 0, vo
                             error: error,
                         });
                     })];
-            case 1:
-                _b.sent();
+            case 2:
+                _c.sent();
                 return [2 /*return*/];
         }
     });
 }); });
 router.post("/signin", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var name, email, password, user, isUserPresent, accessToken;
-    var _a;
-    return __generator(this, function (_b) {
-        name = req.body.name;
-        email = req.body.email;
-        password = req.body.password;
-        console.log("process env", process.env);
-        user = {
-            name: name,
-            email: email,
-            password: bcrypt_1.hashSync(password, 10),
-        };
-        isUserPresent = users_1.getUserByEmail(email);
-        if (!isUserPresent) {
-            res.status(401).json({
-                success: false,
-                message: "please sign up",
-            });
+    var email, password, user, isUserPresent, accessToken;
+    var _a, _b;
+    return __generator(this, function (_c) {
+        switch (_c.label) {
+            case 0:
+                console.log("signin", req.body);
+                email = req.body.email;
+                password = req.body.password;
+                if (!email || !password) {
+                    res.status(400).json({
+                        success: false,
+                        message: "send email and password",
+                    });
+                }
+                user = {
+                    email: email,
+                    password: bcrypt_1.hashSync(password, 10),
+                };
+                return [4 /*yield*/, ((_a = users_1.getUserByEmail(email)) === null || _a === void 0 ? void 0 : _a.then(function (value) { return value === null || value === void 0 ? void 0 : value.email; }))];
+            case 1:
+                isUserPresent = _c.sent();
+                if (!isUserPresent) {
+                    res.status(401).json({
+                        success: false,
+                        message: "please sign up",
+                    });
+                }
+                accessToken = jsonwebtoken_1.sign(user, (_b = process.env.JWT_ACCESS_KEY) !== null && _b !== void 0 ? _b : "");
+                res.status(200).json({
+                    success: true,
+                    accessToken: accessToken,
+                    error: "",
+                });
+                return [2 /*return*/];
         }
-        accessToken = jsonwebtoken_1.sign(user, (_a = process.env.JWT_ACCESS_KEY) !== null && _a !== void 0 ? _a : "");
-        res.status(200).json({
-            success: true,
-            accessToken: accessToken,
-            error: "",
-        });
-        return [2 /*return*/];
     });
 }); });
 exports.default = router;

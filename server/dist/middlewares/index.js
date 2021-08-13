@@ -36,61 +36,38 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.addUser = exports.getUserShow = exports.getUserByEmail = exports.getUsersIndex = void 0;
-var client_1 = require("@prisma/client");
-var prisma = new client_1.PrismaClient();
-var getUsersIndex = function () { return __awaiter(void 0, void 0, void 0, function () {
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0: return [4 /*yield*/, prisma.user.findMany()];
-            case 1: 
-            // const users: IUserIndexModel = await dbQuery("select * from user");
-            // return users;
-            return [2 /*return*/, _a.sent()];
-        }
-    });
-}); };
-exports.getUsersIndex = getUsersIndex;
-var getUserByEmail = function (email) { return __awaiter(void 0, void 0, void 0, function () {
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0: return [4 /*yield*/, prisma.user.findFirst({
-                    where: {
-                        email: email,
-                    },
-                })];
-            case 1: return [2 /*return*/, _a.sent()];
-        }
-    });
-}); };
-exports.getUserByEmail = getUserByEmail;
-var getUserShow = function (id) { return __awaiter(void 0, void 0, void 0, function () { return __generator(this, function (_a) {
-    return [2 /*return*/];
-}); }); };
-exports.getUserShow = getUserShow;
-var addUser = function (user) { return __awaiter(void 0, void 0, void 0, function () {
-    var email, password;
+exports.protectUser = void 0;
+var jsonwebtoken_1 = require("jsonwebtoken");
+var protectUser = function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
+    var authHeader, token;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                email = user.email, password = user.password;
-                return [4 /*yield*/, prisma.user
-                        .create({
-                        data: {
-                            email: email,
-                            password: password,
-                        },
-                    })
-                        .then(function (value) {
-                        console.log("result value sent", value, user);
-                    })
-                        .catch(function (error) {
-                        console.log("error on create user : ", error, user);
+                authHeader = req.headers["authorization"];
+                token = authHeader && authHeader.split(" ")[1];
+                if (!token) {
+                    res.status(400).json({
+                        success: false,
+                        message: "user not logged in",
+                    });
+                }
+                return [4 /*yield*/, jsonwebtoken_1.verify(token, process.env.JWT_ACCESS_KEY || "", function (err, user) {
+                        console.log("user not logged in: ", user);
+                        if (err) {
+                            res.status(400).json({
+                                success: false,
+                                message: "please sign in again",
+                            });
+                        }
+                        else {
+                            req.user = user;
+                            next();
+                        }
                     })];
             case 1:
                 _a.sent();
-                return [2 /*return*/, user];
+                return [2 /*return*/];
         }
     });
 }); };
-exports.addUser = addUser;
+exports.protectUser = protectUser;

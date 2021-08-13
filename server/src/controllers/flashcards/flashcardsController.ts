@@ -6,10 +6,13 @@ import {
   getFlashcards,
   updateFlashcard,
 } from "../../models/flashcards/flashcardsModel";
+import { protectUser } from "../../middlewares";
 
 const router = Router();
 
-router.get("", async (req, res) => {
+router.get("", protectUser, async (req, res) => {
+  // protectUser(req, res);
+
   const flashcards = await getFlashcards();
   res.status(200).json({
     success: true,
@@ -21,7 +24,7 @@ router.get("", async (req, res) => {
   });
 });
 
-router.post("", async (req, res) => {
+router.post("", protectUser, async (req, res) => {
   const flashcards: IFlashcard = req.body;
   if (!flashcards?.question) {
     res.status(400).json({

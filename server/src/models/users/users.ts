@@ -22,9 +22,13 @@ export const getUserByEmail = async (email: string) => {
 export const getUserShow = async (id: number) => {};
 
 export const addUser = async (user: IUser) => {
+  const { email, password } = user;
   await prisma.user
     .create({
-      data: user,
+      data: {
+        email,
+        password,
+      },
     })
     .then((value) => {
       console.log("result value sent", value, user);

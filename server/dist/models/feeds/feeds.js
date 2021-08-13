@@ -36,61 +36,34 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.addUser = exports.getUserShow = exports.getUserByEmail = exports.getUsersIndex = void 0;
+exports.createNotes = exports.getAllNotes = void 0;
 var client_1 = require("@prisma/client");
 var prisma = new client_1.PrismaClient();
-var getUsersIndex = function () { return __awaiter(void 0, void 0, void 0, function () {
+var getAllNotes = function () { return __awaiter(void 0, void 0, void 0, function () {
+    var notes;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, prisma.user.findMany()];
-            case 1: 
-            // const users: IUserIndexModel = await dbQuery("select * from user");
-            // return users;
-            return [2 /*return*/, _a.sent()];
-        }
-    });
-}); };
-exports.getUsersIndex = getUsersIndex;
-var getUserByEmail = function (email) { return __awaiter(void 0, void 0, void 0, function () {
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0: return [4 /*yield*/, prisma.user.findFirst({
-                    where: {
-                        email: email,
-                    },
+            case 0: return [4 /*yield*/, prisma.notes.findMany({
+                    orderBy: { updated_at: "desc" },
                 })];
-            case 1: return [2 /*return*/, _a.sent()];
+            case 1:
+                notes = _a.sent();
+                return [2 /*return*/, notes];
         }
     });
 }); };
-exports.getUserByEmail = getUserByEmail;
-var getUserShow = function (id) { return __awaiter(void 0, void 0, void 0, function () { return __generator(this, function (_a) {
-    return [2 /*return*/];
-}); }); };
-exports.getUserShow = getUserShow;
-var addUser = function (user) { return __awaiter(void 0, void 0, void 0, function () {
-    var email, password;
+exports.getAllNotes = getAllNotes;
+var createNotes = function (note) { return __awaiter(void 0, void 0, void 0, function () {
+    var noteCreated;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0:
-                email = user.email, password = user.password;
-                return [4 /*yield*/, prisma.user
-                        .create({
-                        data: {
-                            email: email,
-                            password: password,
-                        },
-                    })
-                        .then(function (value) {
-                        console.log("result value sent", value, user);
-                    })
-                        .catch(function (error) {
-                        console.log("error on create user : ", error, user);
-                    })];
+            case 0: return [4 /*yield*/, prisma.notes.create({
+                    data: note,
+                })];
             case 1:
-                _a.sent();
-                return [2 /*return*/, user];
+                noteCreated = _a.sent();
+                return [2 /*return*/, noteCreated];
         }
     });
 }); };
-exports.addUser = addUser;
+exports.createNotes = createNotes;

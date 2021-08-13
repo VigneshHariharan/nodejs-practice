@@ -38,8 +38,9 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var express_1 = require("express");
 var flashcardsModel_1 = require("../../models/flashcards/flashcardsModel");
+var middlewares_1 = require("../../middlewares");
 var router = express_1.Router();
-router.get("", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+router.get("", middlewares_1.protectUser, function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var flashcards;
     return __generator(this, function (_a) {
         switch (_a.label) {
@@ -57,7 +58,7 @@ router.get("", function (req, res) { return __awaiter(void 0, void 0, void 0, fu
         }
     });
 }); });
-router.post("", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+router.post("", middlewares_1.protectUser, function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var flashcards, answer, created_by, id, code, question, flashcardsQuery;
     return __generator(this, function (_a) {
         switch (_a.label) {

@@ -52,6 +52,7 @@ app.use(body_parser_1.default.json());
 app.use(body_parser_1.default.urlencoded({ extended: true }));
 app.use("/", routes_1.userRoutes);
 app.use("/", routes_1.authRoutes);
+app.use("/feeds", routes_1.feedsRoutes);
 app.use("/flashcards", routes_1.flashcardsRoutes);
 app.get("/", function (req, res) {
     res.send("<h1>Hello from the TypeScript world!</h1>");

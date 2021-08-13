@@ -7,12 +7,19 @@ import { addUser, getUserByEmail } from "../../models/users/users";
 const router = Router();
 
 router.post("/signup", async (req, res) => {
-  const name = req.body.name;
   const email = req.body.email;
   const password = req.body.password;
 
-  console.log("process env", process.env);
-  const isUserPresent = getUserByEmail(email);
+  if (!email || !password) {
+    res.status(400).json({
+      success: false,
+      message: "send email and password",
+    });
+  }
+
+  const isUserPresent = await getUserByEmail(email)?.then(
+    (value) => value?.email
+  );
   if (isUserPresent) {
     res.status(401).json({
       success: false,
@@ -21,11 +28,10 @@ router.post("/signup", async (req, res) => {
   }
 
   const user = {
-    name,
     email,
     password: hashSync(password, 10),
   };
-  const accessToken = sign({ name, email }, process.env.JWT_ACCESS_KEY ?? "");
+  const accessToken = sign({ email }, process.env.JWT_ACCESS_KEY ?? "");
 
   await addUser(user)
     .then(() => {
@@ -45,19 +51,26 @@ router.post("/signup", async (req, res) => {
 });
 
 router.post("/signin", async (req, res) => {
-  const name = req.body.name;
+  console.log("signin", req.body);
+
   const email = req.body.email;
   const password = req.body.password;
 
-  console.log("process env", process.env);
+  if (!email || !password) {
+    res.status(400).json({
+      success: false,
+      message: "send email and password",
+    });
+  }
 
   const user = {
-    name,
     email,
     password: hashSync(password, 10),
   };
 
-  const isUserPresent = getUserByEmail(email);
+  const isUserPresent = await getUserByEmail(email)?.then(
+    (value) => value?.email
+  );
   if (!isUserPresent) {
     res.status(401).json({
       success: false,
