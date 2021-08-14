@@ -2,7 +2,9 @@ import express, { Express, Request, Response } from "express";
 import bodyParser from "body-parser";
 import helmet from "helmet";
 import dotenv from "dotenv";
+import cors from "cors";
 import { protectUser } from "./middlewares";
+
 import {
   // notesRoutes,
   userRoutes,
@@ -20,6 +22,7 @@ dotenv.config();
 app.use(helmet());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cors());
 
 app.use("/", userRoutes);
 app.use("/", authRoutes);

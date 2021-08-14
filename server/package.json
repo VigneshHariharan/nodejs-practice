@@ -27,6 +27,7 @@
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.0",
+    "@types/cors": "^2.8.12",
     "@types/jsonwebtoken": "^8.5.3",
     "@types/mysql": "^2.15.18",
     "nodemon": "^2.0.7",

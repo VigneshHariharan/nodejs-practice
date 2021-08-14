@@ -65,7 +65,7 @@ router.post("", middlewares_1.protectUser, function (req, res) { return __awaite
     var _a;
     return __generator(this, function (_b) {
         note = (_a = req.body) === null || _a === void 0 ? void 0 : _a.note;
-        console.log("user : ", req.user, req.body);
+        // console.log("user : ", req.user, req.body);
         console.log("note", note);
         res.status(200).json({
             success: true,

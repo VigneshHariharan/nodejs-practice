@@ -16,7 +16,7 @@ router.post("", protectUser, async (req, res) => {
   // get user id and use is_private false and paginate
 
   const note = req.body?.note;
-  console.log("user : ", req.user, req.body);
+  // console.log("user : ", req.user, req.body);
   console.log("note", note);
   res.status(200).json({
     success: true,
