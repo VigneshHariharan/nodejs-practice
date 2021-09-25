@@ -52,7 +52,6 @@ var protectUser = function (req, res, next) { return __awaiter(void 0, void 0, v
                     });
                 }
                 return [4 /*yield*/, jsonwebtoken_1.verify(token, process.env.JWT_ACCESS_KEY || "", function (err, user) {
-                        console.log("user not logged in: ", user);
                         if (err) {
                             res.status(400).json({
                                 success: false,

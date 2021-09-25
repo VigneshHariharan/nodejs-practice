@@ -12,11 +12,13 @@ export const getUsersIndex = async () => {
 };
 
 export const getUserByEmail = async (email: string) => {
-  return await prisma.user.findFirst({
+  const res = await prisma.user.findFirst({
     where: {
       email,
     },
   });
+  console.log("getUserByEmail", res);
+  return res?.id;
 };
 
 export const getUserShow = async (id: number) => {};

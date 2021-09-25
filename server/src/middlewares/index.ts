@@ -15,7 +15,6 @@ export const protectUser = async (req: any, res: any, next: any) => {
     token,
     process.env.JWT_ACCESS_KEY || "",
     (err: any, user: any) => {
-      console.log("user not logged in: ", user);
       if (err) {
         res.status(400).json({
           success: false,

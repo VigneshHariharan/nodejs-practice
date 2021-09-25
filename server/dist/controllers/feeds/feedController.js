@@ -1,4 +1,15 @@
 "use strict";
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -38,6 +49,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var express_1 = require("express");
 var feeds_1 = require("../../models/feeds/feeds");
+var users_1 = require("../../models/users/users");
 var middlewares_1 = require("../../middlewares");
 var router = express_1.Router();
 router.get("", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
@@ -61,16 +73,22 @@ router.get("", function (req, res) { return __awaiter(void 0, void 0, void 0, fu
     });
 }); });
 router.post("", middlewares_1.protectUser, function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var note;
-    var _a;
-    return __generator(this, function (_b) {
-        note = (_a = req.body) === null || _a === void 0 ? void 0 : _a.note;
-        // console.log("user : ", req.user, req.body);
-        console.log("note", note);
-        res.status(200).json({
-            success: true,
-        });
-        return [2 /*return*/];
+    var note, id, createdNote;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                note = req.body.note;
+                return [4 /*yield*/, users_1.getUserByEmail(req.user.email)];
+            case 1:
+                id = _a.sent();
+                return [4 /*yield*/, feeds_1.createNotes(__assign(__assign({}, note), { created_by: id }))];
+            case 2:
+                createdNote = _a.sent();
+                res.status(200).json({
+                    success: true,
+                });
+                return [2 /*return*/];
+        }
     });
 }); });
 exports.default = router;

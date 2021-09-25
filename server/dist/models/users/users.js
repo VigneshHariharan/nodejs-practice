@@ -52,6 +52,7 @@ var getUsersIndex = function () { return __awaiter(void 0, void 0, void 0, funct
 }); };
 exports.getUsersIndex = getUsersIndex;
 var getUserByEmail = function (email) { return __awaiter(void 0, void 0, void 0, function () {
+    var res;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0: return [4 /*yield*/, prisma.user.findFirst({
@@ -59,7 +60,10 @@ var getUserByEmail = function (email) { return __awaiter(void 0, void 0, void 0,
                         email: email,
                     },
                 })];
-            case 1: return [2 /*return*/, _a.sent()];
+            case 1:
+                res = _a.sent();
+                console.log("getUserByEmail", res);
+                return [2 /*return*/, res === null || res === void 0 ? void 0 : res.id];
         }
     });
 }); };

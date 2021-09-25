@@ -49,6 +49,7 @@ router.post("/signup", function (req, res) { return __awaiter(void 0, void 0, vo
             case 0:
                 email = req.body.email;
                 password = req.body.password;
+                // const username =
                 if (!email || !password) {
                     res.status(400).json({
                         success: false,
@@ -96,7 +97,6 @@ router.post("/signin", function (req, res) { return __awaiter(void 0, void 0, vo
     return __generator(this, function (_c) {
         switch (_c.label) {
             case 0:
-                console.log("signin", req.body);
                 email = req.body.email;
                 password = req.body.password;
                 if (!email || !password) {

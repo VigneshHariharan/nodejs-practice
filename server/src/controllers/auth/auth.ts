@@ -9,6 +9,7 @@ const router = Router();
 router.post("/signup", async (req, res) => {
   const email = req.body.email;
   const password = req.body.password;
+  // const username =
 
   if (!email || !password) {
     res.status(400).json({
@@ -18,7 +19,7 @@ router.post("/signup", async (req, res) => {
   }
 
   const isUserPresent = await getUserByEmail(email)?.then(
-    (value) => value?.email
+    (value: any) => value?.email
   );
   if (isUserPresent) {
     res.status(401).json({
@@ -51,8 +52,6 @@ router.post("/signup", async (req, res) => {
 });
 
 router.post("/signin", async (req, res) => {
-  console.log("signin", req.body);
-
   const email = req.body.email;
   const password = req.body.password;
 
@@ -69,7 +68,7 @@ router.post("/signin", async (req, res) => {
   };
 
   const isUserPresent = await getUserByEmail(email)?.then(
-    (value) => value?.email
+    (value: any) => value?.email
   );
   if (!isUserPresent) {
     res.status(401).json({

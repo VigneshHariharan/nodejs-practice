@@ -1,5 +1,7 @@
 import { Router } from "express";
 import { getAllNotes, createNotes } from "../../models/feeds/feeds";
+import { getUserByEmail } from "../../models/users/users";
+
 import { protectUser } from "../../middlewares";
 
 const router = Router();
@@ -12,12 +14,14 @@ router.get("", async (req, res) => {
   });
 });
 
-router.post("", protectUser, async (req, res) => {
+router.post("", protectUser, async (req: any, res) => {
   // get user id and use is_private false and paginate
 
-  const note = req.body?.note;
+  const note = req.body.note;
   // console.log("user : ", req.user, req.body);
-  console.log("note", note);
+  const id = await getUserByEmail(req.user.email);
+
+  const createdNote = await createNotes({ ...note, created_by: id });
   res.status(200).json({
     success: true,
   });
